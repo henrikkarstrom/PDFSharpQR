@@ -23,7 +23,7 @@ namespace PDFSharpQRTests
             AssertTrue2DArraysEqual(rawQrCode, decompressed);
         }
 
-        private bool[,] Decompress(IEnumerable<Rectangle> compressed, int length)
+        private static bool[,] Decompress(IEnumerable<Rectangle> compressed, int length)
         {
             var response = new bool[length, length];
             foreach(var rectangle in compressed)
@@ -42,7 +42,7 @@ namespace PDFSharpQRTests
             return response;
         }
 
-        private void AssertTrue2DArraysEqual(bool[,] expected, bool[,] actual)
+        private static void AssertTrue2DArraysEqual(bool[,] expected, bool[,] actual)
         {
             Assert.Equal(expected.GetLength(0), actual.GetLength(0)); // Rows
             Assert.Equal(expected.GetLength(1), actual.GetLength(1)); // Columns
@@ -76,13 +76,11 @@ namespace PDFSharpQRTests
             testOutputHelper.WriteLine($"Compression {compression * 100} %. {compressedSize} byte vs {notCompressedSize} byte");
         }
         
-        private long GetDocumentSize((PdfDocument document, XGraphics gaphics) reference)
+        private static long GetDocumentSize((PdfDocument document, XGraphics gaphics) reference)
         {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                reference.document.Save(ms, closeStream: false);
-                return ms.Length;
-            }
+            using MemoryStream ms = new();
+            reference.document.Save(ms, closeStream: false);
+            return ms.Length;
         }
 
         private static (PdfDocument document, XGraphics gaphics) GenerateDocument()

@@ -34,7 +34,7 @@ gfx.DrawQrCode(new XRect(200, 100, 100, 100), "Ver1", errorCorrectionLevel: ZXin
 gfx.DrawString("Generated Raw", font, XBrushes.Black, new XRect(200, 250, 100, 0));
 
 // Draw reference
-HttpClient httpClient = new HttpClient();
+using HttpClient httpClient = new();
 using var referenceImageStream = await httpClient.GetStreamAsync("https://upload.wikimedia.org/wikipedia/commons/5/5b/Qr-1.png");
 gfx.DrawImage(XImage.FromBitmapImageStreamThatCannotSeek(referenceImageStream), new XRect(350, 100, 100, 100));
 gfx.DrawString("Reference", font, XBrushes.Black, new XRect(350, 250, 100, 0));

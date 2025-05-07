@@ -6,7 +6,9 @@ using ZXing;
 using ZXing.QrCode.Internal;
 
 [assembly: InternalsVisibleTo("PDFSharpQRTests")]
+#pragma warning disable IDE0130 // Namespace does not match folder structure
 namespace PdfSharp.Drawing
+#pragma warning restore IDE0130 // Namespace does not match folder structure
 {
     public static class XGraphicsExtensions
     {
@@ -39,7 +41,6 @@ namespace PdfSharp.Drawing
             matrix = matrix.Transpose();
             int size = matrix.GetLength(0);
             bool[,] visited = new bool[size, size];
-            var rectangles = new List<Rectangle>();
 
             for (int y = 0; y < size; y++)
             {
@@ -109,7 +110,8 @@ namespace PdfSharp.Drawing
             return result;
         }
 
-        public static void DrawQrCode(this XGraphics graphics, XRect position, string qrCodeContent, ErrorCorrectionLevel? errorCorrectionLevel = null, Dictionary<EncodeHintType, object> hints = null, bool compressed = true)
+        
+        public static void DrawQrCode(this XGraphics graphics, XRect position, string qrCodeContent, ErrorCorrectionLevel? errorCorrectionLevel = null, Dictionary<EncodeHintType, object>? hints = null, bool compressed = true)
         {
             if(graphics == null)
             {
@@ -150,7 +152,7 @@ namespace PdfSharp.Drawing
                 {
                     for (int y = 0; y < bitMatrix.GetLength(1); y++)
                     {
-                        if (bitMatrix[x, y]) // Rotation of image
+                        if (bitMatrix[x, y])
                         {
                             var pixelLocation = new XPoint(position.X + (x * pixelSize), position.Y + (y * pixelSize));
                             var xRectangle = new XRect(pixelLocation, new XSize(pixelSize, pixelSize));
