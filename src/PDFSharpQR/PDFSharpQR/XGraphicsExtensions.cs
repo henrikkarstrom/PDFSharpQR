@@ -1,20 +1,23 @@
-﻿using System;
+﻿using PDFSharpQR;
+using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Runtime.CompilerServices;
+using ZXing;
 using ZXing.QrCode.Internal;
 
+[assembly: InternalsVisibleTo("PDFSharpQRTests")]
 namespace PdfSharp.Drawing
 {
     public static class XGraphicsExtensions
     {
-        private static bool[,] Encode(string qrCodeContent, ErrorCorrectionLevel? errorCorrectionLevel)
+        internal static bool[,] Encode(string qrCodeContent, ErrorCorrectionLevel? errorCorrectionLevel = null, Dictionary<EncodeHintType, object>? hints = null)
         {
             if (string.IsNullOrEmpty(qrCodeContent))
             {
                 throw new ArgumentNullException(nameof(qrCodeContent));
             }
 
-            var input = Encoder.encode(qrCodeContent, errorCorrectionLevel ?? ErrorCorrectionLevel.M);
+            var input = Encoder.encode(qrCodeContent, errorCorrectionLevel ?? ErrorCorrectionLevel.M, hints ?? new Dictionary<EncodeHintType, object>());
             var output = new bool[input.Matrix.Width, input.Matrix.Height];
 
             for (int inputY = 0; inputY < input.Matrix.Height; inputY++)
@@ -28,13 +31,13 @@ namespace PdfSharp.Drawing
                     }
                 }
             }
-
             return output;
         }
 
-        private static IEnumerable<Rectangle> Compress(bool[,] matrix)
+        internal static IEnumerable<Rectangle> Compress(bool[,] matrix)
         {
-            int size = matrix.Length;
+            matrix = matrix.Transpose();
+            int size = matrix.GetLength(0);
             bool[,] visited = new bool[size, size];
             var rectangles = new List<Rectangle>();
 
@@ -89,7 +92,24 @@ namespace PdfSharp.Drawing
             }
         }
 
-        public static void DrawQrCode(this XGraphics graphics, XRect position, string qrCodeContent, ErrorCorrectionLevel? errorCorrectionLevel)
+        internal static bool[,] Transpose(this bool[,] matrix)
+        {
+            int rows = matrix.GetLength(0);
+            int cols = matrix.GetLength(1);
+            bool[,] result = new bool[cols, rows];
+
+            for (int y = 0; y < rows; y++)
+            {
+                for (int x = 0; x < cols; x++)
+                {
+                    result[x, y] = matrix[y, x];
+                }
+            }
+
+            return result;
+        }
+
+        public static void DrawQrCode(this XGraphics graphics, XRect position, string qrCodeContent, ErrorCorrectionLevel? errorCorrectionLevel = null, Dictionary<EncodeHintType, object> hints = null, bool compressed = true)
         {
             if(graphics == null)
             {
@@ -111,15 +131,33 @@ namespace PdfSharp.Drawing
                 throw new ArgumentNullException(nameof(qrCodeContent));
             }
 
-            var bitMatrix = Encode(qrCodeContent, errorCorrectionLevel);
-            var pixelSize = Math.Min(position.Width, position.Height) / bitMatrix.Length;
-            var rectangles = Compress(bitMatrix);
-
-            foreach (var rectangle in rectangles)
+            var bitMatrix = Encode(qrCodeContent, errorCorrectionLevel, hints);
+            var pixelSize = Math.Min(position.Width, position.Height) / bitMatrix.GetLength(0);
+            if (compressed)
             {
-                var pixelLocation = new XPoint(position.X + (rectangle.X * pixelSize), position.Y + (rectangle.Y * pixelSize));
-                var xRectangle = new XRect(pixelLocation, new XSize(rectangle.Width * pixelSize, rectangle.Height * pixelSize));
-                graphics.DrawRectangle(XBrushes.Black, xRectangle);
+                var rectangles = Compress(bitMatrix);
+
+                foreach (var rectangle in rectangles)
+                {
+                    var pixelLocation = new XPoint(position.X + (rectangle.X * pixelSize), position.Y + (rectangle.Y * pixelSize));
+                    var xRectangle = new XRect(pixelLocation, new XSize(rectangle.Width * pixelSize, rectangle.Height * pixelSize));
+                    graphics.DrawRectangle(XBrushes.Black, xRectangle);
+                }
+            }
+            else
+            {
+                for (int x = 0; x < bitMatrix.GetLength(0); x++)
+                {
+                    for (int y = 0; y < bitMatrix.GetLength(1); y++)
+                    {
+                        if (bitMatrix[x, y]) // Rotation of image
+                        {
+                            var pixelLocation = new XPoint(position.X + (x * pixelSize), position.Y + (y * pixelSize));
+                            var xRectangle = new XRect(pixelLocation, new XSize(pixelSize, pixelSize));
+                            graphics.DrawRectangle(XBrushes.Black, xRectangle);
+                        }
+                    }
+                }
             }
         }
     }

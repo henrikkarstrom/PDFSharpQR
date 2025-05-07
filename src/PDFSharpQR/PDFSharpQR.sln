@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35605.110 d17.13
+VisualStudioVersion = 17.13.35605.110
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDFSharpQR", "PDFSharpQR\PDFSharpQR.csproj", "{94935BBE-38D3-4403-BC41-67FB552A1D8A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDFSharpQRTests", "..\..\tests\PDFSharpQRTests\PDFSharpQRTests\PDFSharpQRTests.csproj", "{B25128C0-3798-4412-AB80-41DC2F525C49}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleSample", "..\..\samples\ConsoleSample\ConsoleSample.csproj", "{DF33E77F-9478-F575-C07D-3A6C2EB2CBC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{94935BBE-38D3-4403-BC41-67FB552A1D8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94935BBE-38D3-4403-BC41-67FB552A1D8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94935BBE-38D3-4403-BC41-67FB552A1D8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B25128C0-3798-4412-AB80-41DC2F525C49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B25128C0-3798-4412-AB80-41DC2F525C49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B25128C0-3798-4412-AB80-41DC2F525C49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B25128C0-3798-4412-AB80-41DC2F525C49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF33E77F-9478-F575-C07D-3A6C2EB2CBC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF33E77F-9478-F575-C07D-3A6C2EB2CBC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF33E77F-9478-F575-C07D-3A6C2EB2CBC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF33E77F-9478-F575-C07D-3A6C2EB2CBC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
