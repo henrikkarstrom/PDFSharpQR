@@ -6,18 +6,19 @@ A lightweight C# library that enables the generation of QR codes to be embedded 
 ## Features
 
 - Generate QR codes using ZXing.Net for encoding
-- Embedds QR codes with native PDFSharp Rectangles
-- Reduces the number of rectangles drawed to the PDF
-
+- Embed QR codes using native PDFSharp rectangles
+- Reduces the number of rectangles drawn to the PDF
+- Fills the specified rectangle with the QR code — be sure to include a margin
+- 
 ## Getting Started
-
+```
 xGraphics.DrawQrCode("Hello World", new XRect(440, 700, 100, 100));
-
+```
 ### Prerequisites
 
-To use this library, you need:
+To use this library/code, you need:
 
-- .NET 6+
+- .NET 6 or later
 - PDFSharp
 - ZXing.Net
 
